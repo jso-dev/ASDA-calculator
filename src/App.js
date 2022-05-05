@@ -15,6 +15,7 @@ function reducer(state, {type, payload}) {
   switch(type) {
     case ACTIONS.ADD_DIGIT:
       if (state.overwrite) {
+        // if true prevents adding additional numbers to the answer of a sum
         return {
           ...state,
           currentOperand: payload.digit,
@@ -22,9 +23,11 @@ function reducer(state, {type, payload}) {
         }
       }
       if (payload.digit === "0" && state.currentOperand === "0") {
+        // prevent more than one 0 at the beginning of an operand
         return state
       }
       if (payload.digit === "." && state.currentOperand?.includes(".")) {
+        // prevent more than one . in a number
         return state
       }
       return {
@@ -33,17 +36,19 @@ function reducer(state, {type, payload}) {
       }
 
     case ACTIONS.CHOOSE_OPERATION:
-      console.log(state)
       if (state.currentOperand === null && state.previousOperand === null) {
+        // if there are no operands return the state unchanged
         return state
       }
       if (state.currentOperand === null) {
+        // displayed the operation symbol where there is a prevOperand
         return {
           ...state,
           operation: payload.operation,
         }
       }
       if (state.previousOperand == null) {
+        // prepares the state to await the second operand for the equation
         return {
           ...state,
           operation: payload.operation,
@@ -52,6 +57,7 @@ function reducer(state, {type, payload}) {
         }
       }
       return {
+        // all other checks are passed so the currentOperand is set as the previousOperand
         ...state,
         previousOperand: evaluate(state),
         operation: payload.operation,
@@ -61,6 +67,7 @@ function reducer(state, {type, payload}) {
       return {}
     case ACTIONS.DELETE_DIGIT:
       if (state.overwrite) {
+        // if true, clears the previous answer instead of deleting a single digit from it
         return {
           ...state,
           overwrite: false,
@@ -73,6 +80,7 @@ function reducer(state, {type, payload}) {
       }
 
       return {
+        // removes the last digit
         ...state,
         currentOperand: state.currentOperand.slice(0, -1),
       }
@@ -92,7 +100,6 @@ function reducer(state, {type, payload}) {
         operation: null,
         currentOperand: evaluate(state),
       }
-      break
     default:
       return state
   }
@@ -125,6 +132,7 @@ function evaluate({currentOperand, previousOperand, operation}) {
 const INTEGER_FORMATTER = new Intl.NumberFormat("en-us", {
   maximumFractionDigits: 0,
 })
+
 function formatOperand(operand) {
   if (operand == null) return
   const [integer, decimal] = operand.split(".")
