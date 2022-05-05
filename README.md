@@ -13,4 +13,5 @@ Once all dependencies have been installed type 'npm start'. This will launch the
 If you do not have Node or Git installed use the following links to install them onto your machine. Once done, follow the instructions above:
 
 Latest version of Node: https://nodejs.org/en/download/
+
 Latest version of Git: https://git-scm.com/downloads
