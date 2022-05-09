@@ -47,7 +47,7 @@ function reducer(state, {type, payload}) {
           operation: payload.operation,
         }
       }
-      if (state.previousOperand == null) {
+      if (state.previousOperand === null) {
         // prepares the state to await the second operand for the equation
         return {
           ...state,
@@ -74,7 +74,7 @@ function reducer(state, {type, payload}) {
           currentOperand: null,
         }
       }
-      if (state.currentOperand == null) return state
+      if (state.currentOperand === null) return state
       if (state.currentOperand.length === 1) {
         return { ...state, currentOperand: null }
       }
@@ -86,9 +86,9 @@ function reducer(state, {type, payload}) {
       }
     case ACTIONS.EVALUATE:
       if (
-        state.operation == null ||
-        state.currentOperand == null ||
-        state.previousOperand == null
+        state.operation === null ||
+        state.currentOperand === null ||
+        state.previousOperand === null
       ) {
         return state
       }
@@ -108,8 +108,11 @@ function reducer(state, {type, payload}) {
 function evaluate({currentOperand, previousOperand, operation}) {
   const prev = parseFloat(previousOperand),
         current = parseFloat(currentOperand)
-  if (isNaN(prev) || isNaN(current)) return ""
+
+  if (isNaN(prev) || isNaN(current)) return null
+
   let evaluation = ""
+  
   switch (operation) {
     case "+":
       evaluation = prev + current
@@ -126,6 +129,7 @@ function evaluate({currentOperand, previousOperand, operation}) {
     default:
       return ""
   }
+
   return evaluation.toString()
 }
 
@@ -134,23 +138,24 @@ const INTEGER_FORMATTER = new Intl.NumberFormat("en-us", {
 })
 
 function formatOperand(operand) {
-  if (operand == null) return
+  if (operand === null) return
   const [integer, decimal] = operand.split(".")
-  if (decimal == null) return INTEGER_FORMATTER.format(integer)
+  // decimal is undefined if there is no '.' in the operand
+  if (decimal === undefined) return INTEGER_FORMATTER.format(integer)
   return `${INTEGER_FORMATTER.format(integer)}.${decimal}`
 }
 
 function App() {
-  const [{ previousOperand, currentOperand, operation }, dispatch] = useReducer(reducer, {})
-
+  const [state, dispatch] = useReducer(reducer, { previousOperand: null, currentOperand: null, operation: null })
+  
   return (
     <div className="calculator-grid">
       <div className="calculator-screen">
         <div className="previousOperand">
-          {(formatOperand(previousOperand))} {operation}
+          {(formatOperand(state.previousOperand))} {state.operation}
         </div>
         <div className="currentOperand">
-          {formatOperand(currentOperand)}
+          {formatOperand(state.currentOperand)}
         </div>
       </div>
         <button className="span-2" onClick={() => dispatch({type: ACTIONS.CLEAR})}>AC</button> 
