@@ -22,14 +22,17 @@ function reducer(state, {type, payload}) {
           overwrite: false,
         }
       }
+
       if (payload.digit === "0" && state.currentOperand === "0") {
         // prevent more than one 0 at the beginning of an operand
         return state
       }
+
       if (payload.digit === "." && state.currentOperand?.includes(".")) {
         // prevent more than one . in a number
         return state
       }
+
       return {
         ...state,
         currentOperand: `${state.currentOperand || ""}${payload.digit}`
@@ -40,6 +43,7 @@ function reducer(state, {type, payload}) {
         // if there are no operands return the state unchanged
         return state
       }
+
       if (state.currentOperand === null) {
         // displayed the operation symbol where there is a prevOperand
         return {
@@ -47,6 +51,7 @@ function reducer(state, {type, payload}) {
           operation: payload.operation,
         }
       }
+
       if (state.previousOperand === null) {
         // prepares the state to await the second operand for the equation
         return {
@@ -56,6 +61,7 @@ function reducer(state, {type, payload}) {
           currentOperand: null,
         }
       }
+
       return {
         // all other checks are passed so the currentOperand is set as the previousOperand
         ...state,
@@ -74,7 +80,9 @@ function reducer(state, {type, payload}) {
           currentOperand: null,
         }
       }
+
       if (state.currentOperand === null) return state
+
       if (state.currentOperand.length === 1) {
         return { ...state, currentOperand: null }
       }
@@ -133,15 +141,21 @@ function evaluate({currentOperand, previousOperand, operation}) {
   return evaluation.toString()
 }
 
-const INTEGER_FORMATTER = new Intl.NumberFormat("en-us", {
+const INTEGER_FORMATTER = new Intl.NumberFormat("en-GB", {
   maximumFractionDigits: 0,
 })
 
 function formatOperand(operand) {
-  if (operand === null) return
+  if (operand === null) {
+    return
+  }
+
   const [integer, decimal] = operand.split(".")
-  // decimal is undefined if there is no '.' in the operand
-  if (decimal === undefined) return INTEGER_FORMATTER.format(integer)
+
+  if (decimal === undefined) {
+    return INTEGER_FORMATTER.format(integer)
+  }
+
   return `${INTEGER_FORMATTER.format(integer)}.${decimal}`
 }
 
