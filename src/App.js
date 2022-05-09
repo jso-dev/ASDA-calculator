@@ -70,7 +70,11 @@ function reducer(state, {type, payload}) {
         currentOperand: null
       }
     case ACTIONS.CLEAR:
-      return {}
+      return { 
+        previousOperand: null,
+        currentOperand: null,
+        operation: null
+      }
     case ACTIONS.DELETE_DIGIT:
       if (state.overwrite) {
         // if true, clears the previous answer instead of deleting a single digit from it
