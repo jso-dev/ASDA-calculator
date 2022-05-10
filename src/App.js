@@ -11,6 +11,13 @@ export const ACTIONS = {
   EVALUATE: "evaluate"
 }
 
+const initialState = {
+  previousOperand: null,
+  currentOperand: null,
+  operation: null,
+  overwrite: false
+}
+
 function reducer(state, {type, payload}) {
   switch(type) {
     case ACTIONS.ADD_DIGIT:
@@ -70,11 +77,7 @@ function reducer(state, {type, payload}) {
         currentOperand: null
       }
     case ACTIONS.CLEAR:
-      return { 
-        previousOperand: null,
-        currentOperand: null,
-        operation: null
-      }
+      return initialState
     case ACTIONS.DELETE_DIGIT:
       if (state.overwrite) {
         // if true, clears the previous answer instead of deleting a single digit from it
@@ -164,7 +167,7 @@ function formatOperand(operand) {
 }
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, { previousOperand: null, currentOperand: null, operation: null })
+  const [state, dispatch] = useReducer(reducer, initialState)
   
   return (
     <div className="calculator-grid">
@@ -172,7 +175,7 @@ function App() {
         <div className="previousOperand">
           {(formatOperand(state.previousOperand))} {state.operation}
         </div>
-        <div className="currentOperand">
+        <div className="currentOperand" role="screen">
           {formatOperand(state.currentOperand)}
         </div>
       </div>
