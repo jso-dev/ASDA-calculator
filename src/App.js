@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useCallback } from 'react';
 import './App.css';
 import DigitButton from './components/DigitButton';
 import OperationButton from './components/OperationButton';
@@ -168,6 +168,56 @@ function formatOperand(operand) {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  const keyUpAction = useCallback((e) => {
+    if (
+        e.key === '0' ||
+        e.key === '1' ||
+        e.key === '2' ||
+        e.key === '3' ||
+        e.key === '4' ||
+        e.key === '5' ||
+        e.key === '6' ||
+        e.key === '7' ||
+        e.key === '8' ||
+        e.key === '9' ||
+        e.key === '.'
+    ) {
+      return dispatch({type: ACTIONS.ADD_DIGIT, payload: {digit: e.key}})
+    }
+
+    if (
+        e.key === '+' ||
+        e.key === '-' ||
+        e.key === '/' ||
+        e.key === '*'
+    ) {
+      return dispatch({type: ACTIONS.CHOOSE_OPERATION, payload: {operation: e.key === '*' ? 'x' : e.key}})
+    }
+
+    if (e.key === 'Enter') {
+      return dispatch({type: ACTIONS.EVALUATE})
+    }
+
+    if (e.key === 'Backspace') {
+      return dispatch({type: ACTIONS.DELETE_DIGIT})
+    }
+
+    if (e.key === 'Escape') {
+      return dispatch({type: ACTIONS.CLEAR})
+    }
+    
+    return
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('keyup', keyUpAction)
+
+    return () => {
+      window.removeEventListener('keyup', keyUpAction)
+    }
+  }, [keyUpAction])
+
 
   return (
     <div className="calculator-grid">
