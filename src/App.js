@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import './App.css';
 import DigitButton from './components/DigitButton';
 import OperationButton from './components/OperationButton';
@@ -168,7 +168,7 @@ function formatOperand(operand) {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
-  
+
   return (
     <div className="calculator-grid">
       <div className="calculator-screen">
@@ -176,7 +176,7 @@ function App() {
           {(formatOperand(state.previousOperand))} {state.operation}
         </div>
         <div className="currentOperand" role="screen">
-          {formatOperand(state.currentOperand)}
+          {formatOperand(state.currentOperand) || '0'}
         </div>
       </div>
         <button className="span-2" onClick={() => dispatch({type: ACTIONS.CLEAR})}>AC</button> 

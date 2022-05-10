@@ -3,7 +3,7 @@
 }
 
 body {
-    background-color: #ffffff;
+    background-color: lightgoldenrodyellow;
     display: flex;
     justify-content: center;
     margin: 0;
@@ -13,6 +13,7 @@ body {
     background-color: #78be20;
     border: 1px solid #3d3d3d;
     border-radius: 0.5rem;
+    box-shadow: 5px 10px 8px #888888;
     display: grid;
     gap: 10px;
     grid-template-columns: repeat(4, 5rem);

@@ -219,7 +219,7 @@ test('Clear button test', () => {
     const button2 = screen.getByRole('button', {name: operand2})
     const button3 = screen.getByRole('button', {name: /ac/i})
     const result = screen.getByRole('screen', {role: 'screen'})
-    const expectedResult = ''
+    const expectedResult = '0' // the default value
 
     // Act
     act(()=> {
@@ -277,14 +277,3 @@ test('Only one leading 0 test', () => {
     // Assertion
     expect(result.textContent).toBe(expectedResult)
 })
-
-// test whole sums -- done
-// test decimal sums -- done
-// test negative whole sums - rejected
-// test negative decimal sums - rejected
-// test each operation -- done
-// test clear - done
-// test delete - done
-// test evaluate - done
-// test only 1 leading 0 - done
-// test all buttons are rendered???
