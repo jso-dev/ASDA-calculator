@@ -46,6 +46,24 @@ function reducer(state, {type, payload}) {
       }
 
     case ACTIONS.CHOOSE_OPERATION:
+      // negative numbers solution attempt
+      // sums are not evaluating when using decimals.
+      // if (state.currentOperand === null && payload.operation === '-') {
+        // still issues: -50*2 = 0 not -100
+      //   return {
+      //     ...state,
+      //     currentOperand: '-0'
+      //   }
+      // }
+
+      // if (payload.operation === '-' && state.operation === '-') {
+      //   return {
+      //     ...state,
+      //     currentOperand: '-0'
+      //   }
+      // }
+
+
       if (state.currentOperand === null && state.previousOperand === null) {
         // if there are no operands return the state unchanged
         return state
